@@ -16,7 +16,14 @@ export function validarUser(e) {
   if (regExpMail.test(e.target.value)) {
     console.log('mail correcto');
     error.classList.add('oculto');
-    setCookie('usuario',e.target.value,30)
+    if(!getCookie(e.target.value)){
+      console.log("no existia")
+      setCookie(e.target.value, crearUser(e.target.value));
+    }
+    setCookie('usuarioActual',e.target.value)
+    console.log(new Date().toUTCString());
+    console.log('cookie creada');
+    e.target.value = '';
     window.location.href = './pantalla2.html';
   } else {
     console.log('mail incorrecto');
@@ -25,13 +32,13 @@ export function validarUser(e) {
   }
 }
 
-function setCookie(cname, cvalue, exdays) {
+export function setCookie(cname, cvalue, exdays=30) {
   var d = new Date();
   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
   var expires = 'expires=' + d.toUTCString();
   document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
 }
-function getCookie(cname) {
+export function getCookie(cname) {
   var name = cname + '=';
   var ca = document.cookie.split(';');
   for (var i = 0; i < ca.length; i++) {
@@ -46,6 +53,20 @@ function getCookie(cname) {
   return '';
 }
 
-function deleteCookie(cname) {
+export function deleteCookie(cname) {
   document.cookie = cname + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';
+}
+
+export function crearUser(name) {
+  //logica de formateo de fecha y hora
+  const date=new Date();
+  const fechaFormat=date.toISOString().split('T')[0].split('-').reverse().join('-');
+  const horaFormat=date.toISOString().split('T')[1].split('.')[0];
+
+  const user = {
+    nombre: name,
+    fecha: fechaFormat,
+    hora: horaFormat
+  };
+  return JSON.stringify(user);
 }
