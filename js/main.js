@@ -1,4 +1,5 @@
 import * as func from './functions.js';
+
 let cambio = func.cambioAuto();
 
 document.addEventListener('keydown', (e) => {
@@ -12,3 +13,4 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+document.querySelector('#login input').addEventListener('blur', func.validarUser);
